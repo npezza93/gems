@@ -22,8 +22,13 @@ module Gems
     # @return [Hash]
     # @example
     #   Gems.info 'rails'
-    def info(gem_name)
-      response = get("/api/v1/gems/#{gem_name}.json")
+    def info(gem_name, version = nil)
+      response =
+        if version.nil?
+          get("/api/v1/gems/#{gem_name}.json")
+        else
+          get("/api/v2/rubygems/#{gem_name}/versions/#{version}.json")
+        end
       JSON.parse(response)
     rescue JSON::ParserError
       {}
